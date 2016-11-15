@@ -2,7 +2,7 @@
     <wb-module deploy-name="sssp">
         <wb-resource deploy-path="/" source-path="/WebContent" tag="defaultRootSource"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src"/>
-        <property name="context-root" value="sssp"/>
         <property name="java-output-path" value="/sssp/build/classes"/>
+        <property name="context-root" value="InfoSafe"/>
     </wb-module>
 </project-modules>

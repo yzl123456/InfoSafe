@@ -8,6 +8,6 @@
 </head>
 <body>
 	<h4>Validate Success Page!</h4><br>
-	<a href="/sssp/index.jsp">return to home page~</a>
+	<a href="${pageContext.request.contextPath }/index.jsp">return to home page~</a>
 </body>
 </html>

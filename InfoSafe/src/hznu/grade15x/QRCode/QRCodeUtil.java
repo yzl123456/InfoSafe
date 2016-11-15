@@ -1,4 +1,6 @@
-﻿package com.yihaomen.barcode;
+﻿package hznu.grade15x.QRCode;
+
+
 
 
 

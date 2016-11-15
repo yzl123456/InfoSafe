@@ -1,5 +1,4 @@
-package com.yihaomen.barcode;
-
+package hznu.grade15x.QRCode;
 
 import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;

@@ -13,6 +13,7 @@
 		User user=(User)request.getAttribute("user");
 		session.putValue("id",user.getId());
 		%>
+		<img src="${pageContext.request.contextPath}/QRCode/<%=session.getAttribute("id") %>.jpg"><br>
 		请在您的谷歌APP上输入以下字符串作为密钥:${secretKey}<br>
 		<form action="firstToTotp">
 			<input type="hidden" name="id" value=${sessionScope.id }>

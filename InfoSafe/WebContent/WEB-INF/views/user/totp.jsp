@@ -17,6 +17,7 @@
 	%>
 	<center>
 		<form action="validateCode">
+			<img src="${pageContext.request.contextPath}/QRCode/<%=session.getAttribute("id")%>.jpg"><br>
 			${myError }<br>
 			<input type="hidden" name="id" value="${sessionScope.id }">
 			请输入您手机谷歌app上的动态密码<input type="text" name="code"><br>

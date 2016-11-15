@@ -1,6 +1,14 @@
 package hznu.grade15x.handler;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.Map;
+
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -10,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import hznu.grade15x.QRCode.QRCodeUtil;
 import hznu.grade15x.entity.User;
 import hznu.grade15x.service.UserService;
 import hznu.grade15x.utils.GetRandomString;
@@ -62,9 +71,9 @@ public class UserHandler {
 	
 	//点击登录按钮
 	@RequestMapping("/login")
-	public String login(@RequestParam(value="username",required=false) String username,
+	public String login(HttpServletRequest request,@RequestParam(value="username",required=false) String username,
 			@RequestParam(value="password",required=false) String password,Map<String, Object>map
-			){
+			) throws Exception{
 		//若密码或用户名为空，回到主页
 		if(username==null||username==""||password==null||password==""){
 			map.put("myError", "请输入用户名或密码");
@@ -83,8 +92,6 @@ public class UserHandler {
 				//获取16位纯数字的字符，特别要注意不能是字母的
 				String seed=GetRandomString.getRandomString(16);
 				
-//				seed="1234abcd1234abcd";
-				
 				user.setSeed(seed);
 				String secretKey=GoogleValidate.createCredentials(seed);
 				user.setSecretKey(secretKey);
@@ -94,6 +101,55 @@ public class UserHandler {
 				userService.flush(user);
 				
 				System.out.println("after---------------");
+				
+				//生成对应id的二维码并且保存在QRCode目录下，文件名为id.jpg
+				//特别要注意这里这里二维码不仅要存在项目workspace的目录下，而且在apache部署项目的目录下也要直接存，不然要刷新项目才能显示图片
+				//通过request.getSession().getServletContext().getRealPath("/")得到部署项目的目录
+				//先把生成的图片放到apache的部署目录，同时用IO流将图片放到当前项目目录下
+					
+				
+				//我的apache部署项目的目录 D:\WEB_ADDRESS\wtpwebapps\InfoSafe\
+			    String apachePath=request.getSession().getServletContext().getRealPath("/");
+				String basePath=apachePath+"QRCode";
+			
+//				String url="otpauth://totp/Google%3Ayourname@gmail.com?secret="+secretKey+"&issuer=Google";
+				String url="otpauth://totp/"+username+"%3A"+username+"@gmail.com?secret="+secretKey+"&issuer=Google";
+				
+				//https://www.google.com/chart?chs=200x200&chld=M%%7C0&cht=qr&chl=otpauth://totp/%s@%s%%3Fsecret%%3D%s
+				//二维码的logo图片所在地址
+				String logoPath=basePath+"//qq.png";
+				//保存图片的id
+				QRCodeUtil.id=user.getId()+"";
+				//生成二维码 url->二维码的url链接  logopath-->logo图片所在的地址  basePath-->存放二维码的文件夹 true-->压缩二维码
+				QRCodeUtil.encode(url, logoPath, basePath, true);
+				
+				
+				/*
+				 * IO流操作将apache部署目录下的图片复制到项目目录的QRCode下
+				 */
+				//本地工程目录，根据实际修改
+				String projectPath="C://Users//泽林//Desktop//Github//InfoSafe//InfoSafe//WebContent";
+				
+				String localPath=projectPath+"//QRCode";
+				File file=new File(localPath+"//qq.png");
+				//如果本地路径改对了 能够找到文件
+				if(file.exists()){
+					/*
+					 * IO流复制
+					 */
+					System.out.println("ready to copy..........");
+					InputStream in=new FileInputStream(new File(basePath+"//"+user.getId()+".jpg"));
+					OutputStream out=new FileOutputStream(new File(localPath+"//"+user.getId()+".jpg"));
+					byte[] buffer=new byte[1024*10];
+					int len=0;
+					while((len=in.read(buffer))!=-1){
+						out.write(buffer);
+					}
+					in.close();
+					out.close();
+				}
+				
+				
 				
 				//放到页面的requestScope中
 				map.put("secretKey",secretKey);
