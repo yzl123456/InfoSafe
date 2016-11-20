@@ -18,9 +18,11 @@
 			<tr>
 				<th>ID</th>
 				<th>Username</th>
-				<th>Password</th>
+				<th>Password(应当丢弃)</th>
 				<th>SecretKey</th>
 				<th>Seed</th>
+				<th>ServerMD5String</th>
+				<th>LoginTime</th>
 			</tr>
 			<c:forEach items="${page.content }" var="user">
 				<tr>
@@ -29,7 +31,8 @@
 					<td>${user.password }</td>
 					<td>${user.secretKey }</td>
 					<td>${user.seed }</td>
-					
+					<td>${user.serverMD5String }</td>
+					<td>${user.userLoginTime }</td>
 				</tr>
 			</c:forEach>
 		</table>

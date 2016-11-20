@@ -18,6 +18,23 @@ public class User {
 	private String password;
 	private String seed;
 	private String secretKey;
+	
+	//新增s_key需求
+	private String serverMD5String;
+	private Integer userLoginTime=0;
+	public String getServerMD5String() {
+		return serverMD5String;
+	}
+	public void setServerMD5String(String serverMD5String) {
+		this.serverMD5String = serverMD5String;
+	}
+	public Integer getUserLoginTime() {
+		return userLoginTime;
+	}
+	
+	public void setUserLoginTime(Integer userLoginTime) {
+		this.userLoginTime = userLoginTime;
+	}
 	public Integer getId() {
 		return id;
 	}

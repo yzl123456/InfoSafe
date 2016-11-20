@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import hznu.grade15x.MD5utils.MD5;
 import hznu.grade15x.QRCode.QRCodeUtil;
 import hznu.grade15x.entity.User;
 import hznu.grade15x.service.UserService;
@@ -51,6 +52,11 @@ public class UserHandler {
 			return "user/register";
 		}
 		
+		//新增s-key需求，给每个user创建serverMD5String，假定一轮s-key能够输入密码100000次
+		String serverMD5String=MD5.getServerMD5String(password, 100000);
+		user.setServerMD5String(serverMD5String);
+		user.setUserLoginTime(0);
+		
 		userService.save(user);
 		return "user/home";
 	}
@@ -81,11 +87,24 @@ public class UserHandler {
 		}
 		
 		User user=userService.getByName(username);
+		if(user==null){
+			map.put("myError", "用户名或密码错误");
+			return "user/home";
+		}
 		
 		System.out.println("-->"+password);
 		System.out.println("-->"+user.getPassword());
+		
+		//进行密码验证前根据登陆次数进行预处理
+		password=MD5.prepareHash(password, user.getUserLoginTime());
+		
 		//密码正确
-		if(password.equals(user.getPassword())){
+		if(MD5.stringMD5(password).equals(user.getServerMD5String())){
+			//更新服务端的MD5String 和loginTime
+			user.setUserLoginTime(user.getUserLoginTime()+1);
+			user.setServerMD5String(password);
+			userService.flush(user);
+			
 			//表中secretKey字段非空表示不是第一次登录
 			if(user.getSecretKey()==null){
 				System.out.println("To Next");
@@ -113,9 +132,9 @@ public class UserHandler {
 				String basePath=apachePath+"QRCode";
 			
 //				String url="otpauth://totp/Google%3Ayourname@gmail.com?secret="+secretKey+"&issuer=Google";
-				String url="otpauth://totp/"+username+"%3A"+username+"@gmail.com?secret="+secretKey+"&issuer=Google";
+				String url="otpauth://totp/Google%3A"+username+"@gmail.com?secret="+secretKey+"&issuer=Google";
+
 				
-				//https://www.google.com/chart?chs=200x200&chld=M%%7C0&cht=qr&chl=otpauth://totp/%s@%s%%3Fsecret%%3D%s
 				//二维码的logo图片所在地址
 				String logoPath=basePath+"//qq.png";
 				//保存图片的id

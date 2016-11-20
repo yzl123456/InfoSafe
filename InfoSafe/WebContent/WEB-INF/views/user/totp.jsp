@@ -10,7 +10,6 @@
 <body>
 
 	<%	
-	
 		User user=(User)request.getAttribute("user");
 		if(user!=null)	
 			session.putValue("id", user.getId());
