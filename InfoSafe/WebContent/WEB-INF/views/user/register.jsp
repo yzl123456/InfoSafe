@@ -22,7 +22,7 @@
 			$(this).val(val);
 			
 			
-			var url="${pageContext.request.contextPath }/ajaxValidateName";
+			var url="${pageContext.request.contextPath }/ajaxUserValidateName";
 			var args={"name":val,"data":new Date()};
 			$.post(url,args,function(data){
 				if(data=="0")

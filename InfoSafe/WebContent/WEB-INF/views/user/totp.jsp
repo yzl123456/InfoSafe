@@ -11,8 +11,10 @@
 
 	<%	
 		User user=(User)request.getAttribute("user");
-		if(user!=null)	
+		if(user!=null){
 			session.putValue("id", user.getId());
+			session.putValue("username", user.getUsername());
+		}
 	%>
 	<center>
 		<form action="validateCode">

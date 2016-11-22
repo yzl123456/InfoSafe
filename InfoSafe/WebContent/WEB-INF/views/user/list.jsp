@@ -13,12 +13,12 @@
 	<c:if test="${page.numberOfElements==0||page==null }">
 		没有任何记录
 	</c:if>
-	<c:if test="${page!=null }">
+	<c:if test="${page!=null && page.numberOfElements>0}">
 		<table border="1" cellpadding="10" cellspacing="0">
 			<tr>
 				<th>ID</th>
 				<th>Username</th>
-				<th>Password(应当丢弃)</th>
+			
 				<th>SecretKey</th>
 				<th>Seed</th>
 				<th>ServerMD5String</th>
@@ -28,7 +28,7 @@
 				<tr>
 					<td>${user.id }</td>
 					<td>${user.username }</td>
-					<td>${user.password }</td>
+				
 					<td>${user.secretKey }</td>
 					<td>${user.seed }</td>
 					<td>${user.serverMD5String }</td>

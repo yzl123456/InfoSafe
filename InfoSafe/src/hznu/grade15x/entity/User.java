@@ -15,7 +15,7 @@ public class User {
 	@Id
 	private Integer id;
 	private String username;
-	private String password;
+//	private String password;
 	private String seed;
 	private String secretKey;
 	
@@ -47,12 +47,7 @@ public class User {
 	public void setUsername(String username) {
 		this.username = username;
 	}
-	public String getPassword() {
-		return password;
-	}
-	public void setPassword(String password) {
-		this.password = password;
-	}
+
 	public String getSeed() {
 		return seed;
 	}
@@ -69,7 +64,6 @@ public class User {
 		super();
 		this.id = id;
 		this.username = username;
-		this.password = password;
 		this.seed = seed;
 		this.secretKey = secretKey;
 	}
@@ -78,7 +72,7 @@ public class User {
 	}
 	@Override
 	public String toString() {
-		return "User [id=" + id + ", username=" + username + ", password=" + password + ", seed=" + seed
+		return "User [id=" + id + ", username=" + username + " seed=" + seed
 				+ ", secretKey=" + secretKey + "]";
 	}
 	

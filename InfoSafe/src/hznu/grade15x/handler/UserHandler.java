@@ -92,8 +92,6 @@ public class UserHandler {
 			return "user/home";
 		}
 		
-		System.out.println("-->"+password);
-		System.out.println("-->"+user.getPassword());
 		
 		//进行密码验证前根据登陆次数进行预处理
 		password=MD5.prepareHash(password, user.getUserLoginTime());
@@ -201,7 +199,7 @@ public class UserHandler {
 		System.out.println("param code--------------"+code);
 		//验证成功
 		if(serverCode.equals(code)){
-			return "user/success";
+			return "redirect:loginSuccess";
 		}
 		//失败
 		else{
@@ -212,7 +210,7 @@ public class UserHandler {
 	
 	//ajax请求验证用户名是否可用
 	@ResponseBody
-	@RequestMapping("/ajaxValidateName")
+	@RequestMapping("/ajaxUserValidateName")
 	public String validateName(@RequestParam(value="name",required=true) String name){
 		User user=userService.getByName(name);
 		//数据表中存在该用户，返回标记位 1 否则返回 0
@@ -220,6 +218,14 @@ public class UserHandler {
 			return "0";
 		else return "1";
 	}
+	@RequestMapping("/loginSuccess")
+	public String allSuccess(Map<String, Object>map){
+
+		return "emp/index";
+	}
 	
-	
+	@RequestMapping("/toUserHome")
+	public String toUserHome(){
+		return "user/home";
+	}
 }
