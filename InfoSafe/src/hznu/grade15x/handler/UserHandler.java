@@ -105,16 +105,14 @@ public class UserHandler {
 			
 			//表中secretKey字段非空表示不是第一次登录
 			if(user.getSecretKey()==null){
-				System.out.println("To Next");
-				//获取16位纯数字的字符，特别要注意不能是字母的
-				String seed=GetRandomString.getRandomString(16);
+				//服务器端生成16位的随机数
+				String randomNumber=GetRandomString.getRandomString(16);
 				
-				user.setSeed(seed);
-				String secretKey=GoogleValidate.createCredentials(seed);
+				String secretKey=GoogleValidate.createCredentials(randomNumber);
 				user.setSecretKey(secretKey);
 				System.out.println("before---------------");
 				
-				//实体类中更新了secretKey字段和seed字段后在数据库中刷新对应的数据
+				//实体类中更新了secretKey字段后在数据库中刷新对应的数据
 				userService.flush(user);
 				
 				System.out.println("after---------------");
@@ -176,7 +174,10 @@ public class UserHandler {
 			//第一次注册成功后登录
 			else {
 				map.put("user",user);
-				return "user/totp";
+				if(user.getTotp()==1)
+					return "user/totp";
+				else
+					return "emp/index";
 			}
 		}
 		//密码错误
@@ -190,11 +191,11 @@ public class UserHandler {
 	//动态密码验证
 	@RequestMapping("/validateCode")
 	public String validateCode(@RequestParam(value="code",required=false) String code,
-			@RequestParam(value="id",required=false) String id,Map<String, Object>map){
+			@RequestParam(value="id",required=false) String id,Map<String, Object>map) throws Exception{
 		//定位到数据表中的当前用户
 		User user=userService.getByID(Integer.parseInt(id));
 		//获取当前用户在服务器端的动态密码
-		String serverCode=GoogleValidate.getValidateCode(user.getSeed());
+		String serverCode=GoogleValidate.getValidateCode(user.getSecretKey());
 		System.out.println("Server code--------------"+serverCode);
 		System.out.println("param code--------------"+code);
 		//验证成功
@@ -220,12 +221,31 @@ public class UserHandler {
 	}
 	@RequestMapping("/loginSuccess")
 	public String allSuccess(Map<String, Object>map){
-
+		
 		return "emp/index";
 	}
 	
 	@RequestMapping("/toUserHome")
 	public String toUserHome(){
 		return "user/home";
+	}
+	
+	
+	@RequestMapping("/closeGoogle")
+	public String closeGoogle(@RequestParam(value="id",required=true)Integer id){
+		System.out.println(id+"------------");
+		User user=userService.getByID(id);
+		user.setTotp(0);
+		userService.flush(user);
+		return "emp/index_close";
+	}
+	
+	@RequestMapping("/openGoogle")
+	public String openGoogle(@RequestParam(value="id",required=true)Integer id){
+		System.out.println(id+"------------");
+		User user=userService.getByID(id);
+		user.setTotp(1);
+		userService.flush(user);
+		return "emp/index_open";
 	}
 }

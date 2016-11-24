@@ -12,7 +12,7 @@
 			var nameVal=$("#name").val();
 			var passVal=$("#password").val();
 			if(nameVal!=null&&nameVal!=""&&passVal!=""&&passVal!=null)
-				alert("register success!")
+				alert("注册成功!")
 		});
 	
 		

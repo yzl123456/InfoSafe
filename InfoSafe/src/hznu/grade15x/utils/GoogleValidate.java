@@ -116,8 +116,8 @@ public class GoogleValidate {
 	/*
 	 * 返回服务器端生成的动态密码
 	 */
-	public static String getValidateCode(String seed){
-		int result=calculateCode(seed.getBytes(), new Date().getTime()/30000);
+	public static String getValidateCode(String secretKey) throws Exception{
+		int result=calculateCode(Base32.decode(secretKey), new Date().getTime()/30000);
 		String code = String.format("%06d", result);
 		return code;
 	}

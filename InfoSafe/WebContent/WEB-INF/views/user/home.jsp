@@ -10,8 +10,8 @@
 </head>
 <body>
 	<center>
-		<a href="users">List ALL</a>
-		<h4>This is the Home Page!</h4>
+		<a href="users">显示所有用户</a>
+		<h4>欢迎来到登陆页面!</h4>
 		${myError }<br>
 		<form action="login" method="post">
 		Username:<input type="text" name="username"><br>

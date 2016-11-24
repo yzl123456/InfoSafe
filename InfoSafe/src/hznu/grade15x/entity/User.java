@@ -15,10 +15,8 @@ public class User {
 	@Id
 	private Integer id;
 	private String username;
-//	private String password;
-	private String seed;
 	private String secretKey;
-	
+	private Integer Totp=1;//是否开启谷歌身份验证 1->open 2->close
 	//新增s_key需求
 	private String serverMD5String;
 	private Integer userLoginTime=0;
@@ -48,11 +46,12 @@ public class User {
 		this.username = username;
 	}
 
-	public String getSeed() {
-		return seed;
+	
+	public Integer getTotp() {
+		return Totp;
 	}
-	public void setSeed(String seed) {
-		this.seed = seed;
+	public void setTotp(Integer totp) {
+		Totp = totp;
 	}
 	public String getSecretKey() {
 		return secretKey;
@@ -60,21 +59,19 @@ public class User {
 	public void setSecretKey(String secretKey) {
 		this.secretKey = secretKey;
 	}
-	public User(Integer id, String username, String password, String seed, String secretKey) {
+	public User(Integer id, String username, String secretKey) {
 		super();
 		this.id = id;
 		this.username = username;
-		this.seed = seed;
 		this.secretKey = secretKey;
 	}
 	public User() {
 		// TODO Auto-generated constructor stub
 	}
+	
 	@Override
 	public String toString() {
-		return "User [id=" + id + ", username=" + username + " seed=" + seed
-				+ ", secretKey=" + secretKey + "]";
+		return "User [id=" + id + ", username=" + username + ", secretKey=" + secretKey + ", serverMD5String="
+				+ serverMD5String + ", userLoginTime=" + userLoginTime + "]";
 	}
-	
-	
 }

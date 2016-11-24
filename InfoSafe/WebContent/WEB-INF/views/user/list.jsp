@@ -20,7 +20,7 @@
 				<th>Username</th>
 			
 				<th>SecretKey</th>
-				<th>Seed</th>
+				<th>Totp</th>
 				<th>ServerMD5String</th>
 				<th>LoginTime</th>
 			</tr>
@@ -30,7 +30,12 @@
 					<td>${user.username }</td>
 				
 					<td>${user.secretKey }</td>
-					<td>${user.seed }</td>
+					<c:if test="${user.totp==1 }">
+						<td>true</td>
+					</c:if>
+					<c:if test="${user.totp==0 }">
+						<td>false</td>
+					</c:if>
 					<td>${user.serverMD5String }</td>
 					<td>${user.userLoginTime }</td>
 				</tr>
