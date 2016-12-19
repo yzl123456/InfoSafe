@@ -61,26 +61,26 @@ public class EmployeeHandler {
 		return "emp/input";
 	}
 	
-	@RequestMapping(value="/emp",method=RequestMethod.POST)
+	@RequestMapping(value="/emp",method=RequestMethod.POST)//新增
 	public String save(Employee employee){
 		employeeService.save(employee);
 		return "redirect:/emps";
 	}
 	
-	@RequestMapping(value="/emp/{id}",method=RequestMethod.GET)
+	@RequestMapping(value="/emp/{id}",method=RequestMethod.GET)//查询
 	public String input(@PathVariable("id") Integer id,Map<String, Object>map ){
 		map.put("employee", employeeService.get(id));
 		map.put("departments",departmentService.getAll());
 		return "emp/input";
 	}
 	
-	@RequestMapping(value="/emp/{id}",method=RequestMethod.PUT)
+	@RequestMapping(value="/emp/{id}",method=RequestMethod.PUT)//更新
 	public String update(Employee employee){
 		employeeService.save(employee);
 		return "redirect:/emps";
 	}
 	
-	@RequestMapping(value="/emp/{id}",method=RequestMethod.DELETE)
+	@RequestMapping(value="/emp/{id}",method=RequestMethod.DELETE)//删除
 	public String delete(@PathVariable("id") Integer id){
 		employeeService.delete(id);
 		return "redirect:/emps";

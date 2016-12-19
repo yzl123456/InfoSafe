@@ -24,7 +24,7 @@ public class GoogleValidate {
 	/**
 	 * 此为谷歌提供的算法，似乎用到了hash什么牛逼的东西
 	 * 
-	 * @param key key为服务器端一开始为用户生成的种子seed
+	 * @param key key为服务器端一开始为用户生成的randomNumber
 	 * @param tm  当前的时间  new Date().getTime()/30000 除以30000 表示30s一变
 	 * @return  返回服务器端计算出来的动态密码
 	 */
@@ -93,8 +93,8 @@ public class GoogleValidate {
 		return 0;
     }
 	
-	 public static  String createCredentials(String seed){
-		   String sharedKey= new Base32().encode(seed.getBytes());
+	 public static  String createCredentials(String randomNumber){
+		   String sharedKey= new Base32().encode(randomNumber.getBytes());
 		   System.out.println("-->"+sharedKey);
 		   return sharedKey;
 	 }
